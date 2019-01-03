@@ -1,0 +1,1 @@
+# Add extra components into a docker image for our terraform build pipelines
