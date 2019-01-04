@@ -3,12 +3,13 @@ sudo: required
 services:
 - docker
 
-jobs:
-  include:
-  - stage: build docker image
-    script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t terraform-k8s-build .
-    - docker images
-    - docker tag terraform-k8s-build $DOCKER_USERNAME/terraform-k8s-build
-    - docker push $DOCKER_USERNAME/terraform-k8s-build
+
+
+script:
+  - docker build -t terraform-k8s-build .
+
+after_success:
+  - test "${TRAVIS_BRANCH}" = "master" -a "${TRAVIS_PULL_REQUEST}" = "false" && echo "Pushing to repo" || exit 0
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker tag terraform-k8s-build $DOCKER_USERNAME/terraform-k8s-build
+  - docker push $DOCKER_USERNAME/terraform-k8s-build
