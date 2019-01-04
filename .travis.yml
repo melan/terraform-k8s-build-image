@@ -12,5 +12,3 @@ jobs:
     - docker images
     - docker tag terraform-k8s-build $DOCKER_USERNAME/terraform-k8s-build
     - docker push $DOCKER_USERNAME/terraform-k8s-build
-  - stage: test
-    script: docker run --rm $DOCKER_USERNAME/terraform-k8s-build /bin/bash -c "test $(/root/.terraform.d/plugins/terraform-provider-k8s --help 2>&1 | grep "This binary is a plugin" | wc -l) -eq 1"
